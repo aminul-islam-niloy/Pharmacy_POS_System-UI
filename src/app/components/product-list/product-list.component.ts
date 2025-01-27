@@ -12,7 +12,7 @@ import {FormBuilder,FormGroup,ReactiveFormsModule,Validators,} from '@angular/fo
 @Component({
   selector: 'app-product-list',
   standalone: true,
-  imports: [ReactiveFormsModule, CommonModule,HttpClientModule],
+  imports: [ CommonModule],
   templateUrl: './product-list.component.html',
   styleUrls: ['./product-list.component.css']
 })
