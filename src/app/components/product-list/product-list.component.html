@@ -1,66 +1,140 @@
 <div class="container mt-3">
-    <div class="row">
-      <!-- Search -->
-      <div class="col-md-12 mb-3">
-        <input
-          type="text"
-          class="form-control"
-          placeholder="Search product..."
-          (input)="searchProduct()"
-        />
+  <div class="row">
+    <!-- Header -->
+    <div class="col-12 d-flex justify-content-between align-items-center mb-3">
+      <div>
+        <h4>Invoice 360</h4>
+        <!-- <small>{{ currentDateTime }}</small> -->
       </div>
-  
-      <!-- Brands Filter -->
-      <div class="col-md-4">
+      <div>
+        <button class="btn btn-outline-secondary">Report</button>
+        <button class="btn btn-outline-secondary">Return</button>
+        <button class="btn btn-outline-secondary">Recent</button>
+        <button class="btn btn-outline-warning">Draft (0)</button>
+        <button class="btn btn-outline-danger">Exit</button>
+      </div>
+    </div>
+
+    <!-- Search Bar -->
+    <div class="col-md-12 mb-3">
+      <input
+        type="text"
+        class="form-control"
+        placeholder="Search by Product Name, Generic, Barcode..."
+      />
+
+      <div class="col-md-2">
         <h5>Filter by Brand</h5>
-        <ul class="list-group">
-          <li
-            *ngFor="let brand of brands"
-            class="list-group-item"
-            (click)="filterByBrand(brand.id)"
+        <div class="dropdown">
+          <button
+            class="btn btn-secondary dropdown-toggle w-100"
+            type="button"
+            id="brandDropdown"
+            data-bs-toggle="dropdown"
+            aria-expanded="false"
           >
-            {{ brand.name }}
-          </li>
-        </ul>
+            Select Brand
+          </button>
+          <ul class="dropdown-menu w-100" aria-labelledby="brandDropdown">
+            <li
+              *ngFor="let brand of brands"
+              class="dropdown-item d-flex justify-content-between align-items-center"
+              (click)="filterByBrand(brand.id)"
+            >
+              {{ brand.name }}
+              <span class="badge bg-primary rounded-pill">{{ brand.count }}</span>
+            </li>
+          </ul>
+        </div>
       </div>
-  
-      <!-- Categories Filter -->
-      <div class="col-md-4">
-        <h5>Filter by Category</h5>
-        <ul class="list-group">
-          <li
-            *ngFor="let category of categories"
-            class="list-group-item"
-            (click)="filterByCategory(category.id)"
-          >
-            {{ category.name }}
-          </li>
-        </ul>
-      </div>
-  
-      <!-- Products -->
-      <div class="col-md-12 mt-4">
-        <div class="row">
-          <div *ngFor="let product of filteredProducts" class="col-md-3 mb-3">
-            <div class="card">
-              <img
-                [src]="product.imageUrl || 'https://via.placeholder.com/150'"
-                class="card-img-top"
-                alt="{{ product.name }}"
-              />
-              <div class="card-body">
-                <h5 class="card-title">{{ product.name }}</h5>
-                <p class="card-text">
-                  Price: {{ product.price | currency }}
-                </p>
-                <button class="btn btn-primary btn-sm">
-                  Add to Cart
-                </button>
-              </div>
+      
+    </div>
+
+    <!-- Categories Filter -->
+    <div class="col-md-2">
+      <h5>Filter by Category</h5>
+      <ul class="list-group">
+        <li
+          *ngFor="let category of categories"
+          class="list-group-item"
+          (click)="filterByCategory(category.id)"
+        >
+          {{ category.name }}
+        </li>
+      </ul>
+    </div>
+
+    <!-- Brands Filter -->
+
+    <!-- Products -->
+    <div class="col-md-6">
+      <h5>Total Products</h5>
+      <div class="row">
+        <div *ngFor="let product of filteredProducts" class="col-md-4 mb-3">
+          <div class="card h-100">
+            <img
+              [src]="product.imageUrl || 'https://via.placeholder.com/150'"
+              class="card-img-top"
+              alt="{{ product.name }}"
+            />
+            <div class="card-body text-center">
+              <h6 class="card-title">{{ product.name }}</h6>
+              <p class="card-text">
+                <strong>Price:</strong> {{ product.price | currency }}
+                <span *ngIf="product.discount" class="text-danger">
+                  ({{ product.discount }}% Off)
+                </span>
+              </p>
+              <p class="text-muted">Stock: {{ product.stock }}</p>
+              <button
+                class="btn btn-primary btn-sm"
+                [disabled]="product.stock === 0"
+              >
+                Add to Cart
+              </button>
             </div>
           </div>
         </div>
       </div>
     </div>
+
+    <!-- Cart -->
+    <div class="col-md-4">
+      <h5>Cart</h5>
+      <table class="table table-bordered">
+        <thead>
+          <tr>
+            <th>Item</th>
+            <th>Qty</th>
+            <th>Price</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td></td>
+            <td>
+              <div class="input-group">
+                <button class="btn btn-outline-secondary btn-sm">-</button>
+                <input type="text" class="form-control text-center" readonly />
+                <button class="btn btn-outline-secondary btn-sm">+</button>
+              </div>
+            </td>
+
+            <td>
+              <button class="btn btn-danger btn-sm">
+                <i class="bi bi-trash"></i>
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      <div>
+        <p><strong>Subtotal:</strong></p>
+        <p><strong>VAT/Tax:</strong></p>
+        <p><strong>Total:</strong></p>
+      </div>
+      <button class="btn btn-success w-100">Proceed to Payment</button>
+    </div>
   </div>
-  
+</div>
