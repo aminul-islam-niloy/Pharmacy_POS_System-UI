@@ -20,12 +20,17 @@ export class ProductListComponent implements OnInit {
   filteredProducts: any[] = [];
   searchText: string = '';
   selectedBrandName: string = 'All Brands';
-
+  currentDateTime: string = '';
 
   constructor(private apiService: ApiService) {}
 
   ngOnInit(): void {
     this.fetchData();
+    this.updateCurrentDateTime();
+
+    setInterval(() => {
+      this.updateCurrentDateTime();
+    }, 1000);
   }
 
   fetchData(): void {
@@ -88,4 +93,20 @@ export class ProductListComponent implements OnInit {
         product.barcode?.toLowerCase().includes(searchLower)
     );
   }
+
+  updateCurrentDateTime(): void {
+    const now = new Date();
+    const options: Intl.DateTimeFormatOptions = {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric',
+      hour: 'numeric',
+      minute: 'numeric',
+      second: 'numeric',
+      hour12: true, 
+    };
+
+    this.currentDateTime = new Intl.DateTimeFormat('en-US', options).format(now);
+  }
+
 }
