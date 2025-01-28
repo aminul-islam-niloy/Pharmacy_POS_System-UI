@@ -25,6 +25,16 @@ export class ApiService {
   addOrder(order: any): Observable<any> {
     return this.http.post(`${this.baseUrl}/Order`, order);
   }
+  getCartItems(): Observable<any> {
+    return this.http.get(`${this.baseUrl}/Cart`);
+  }
 
+  addToCart(item: any): Observable<any> {
+    return this.http.post(`${this.baseUrl}/Cart/AddToCart`, item);
+  }
+
+  removeFromCart(productId: number): Observable<any> {
+    return this.http.delete(`${this.baseUrl}/Cart/RemoveFromCart/${productId}`);
+  }
  
 }

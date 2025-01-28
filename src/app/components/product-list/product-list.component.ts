@@ -20,14 +20,23 @@ export class ProductListComponent implements OnInit {
   filteredProducts: any[] = [];
   searchText: string = '';
   selectedBrandName: string = 'All Brands';
+  cartItems: any[] = [];
   currentDateTime: string = '';
+
+  filteredCartItems: any[] = [];
+  cartSearchText: string = '';
+
+  subtotal: number = 0;
+  vat: number = 0;
+  total: number = 0;
+  
 
   constructor(private apiService: ApiService) {}
 
   ngOnInit(): void {
     this.fetchData();
     this.updateCurrentDateTime();
-
+    this.loadCart();
     setInterval(() => {
       this.updateCurrentDateTime();
     }, 1000);
@@ -107,6 +116,80 @@ export class ProductListComponent implements OnInit {
     };
 
     this.currentDateTime = new Intl.DateTimeFormat('en-US', options).format(now);
+  }
+
+  loadCart(): void {
+    this.apiService.getCartItems().subscribe((cart) => {
+      this.cartItems = cart || [];
+    });
+  }
+
+  addToCart(product: any): void {
+    const cartItem = {
+      productId: product.id,
+      name: product.name,
+      price: product.price,
+      quantity: 1,
+      subTotal: product.price,
+    };
+
+    this.apiService.addToCart(cartItem).subscribe((cart) => {
+      this.cartItems = cart;
+      alert(`${product.name} added to cart!`);
+    });
+  }
+
+  // removeFromCart(productId: number): void {
+  //   this.apiService.removeFromCart(productId).subscribe((cart) => {
+  //     this.cartItems = cart;
+  //   });
+  // }
+
+  filterCart(): void {
+    const searchLower = this.cartSearchText.toLowerCase();
+    this.filteredCartItems = this.cartItems.filter(
+      (item) => item.name.toLowerCase().includes(searchLower)
+    );
+  }
+
+  increaseQty(item: any): void {
+    item.quantity += 1;
+    item.subTotal = item.quantity * item.price;
+    this.updateCart();
+  }
+
+  decreaseQty(item: any): void {
+    if (item.quantity > 1) {
+      item.quantity -= 1;
+      item.subTotal = item.quantity * item.price;
+      this.updateCart();
+    } else {
+      this.removeFromCart(item.productId);
+    }
+  }
+
+  removeFromCart(productId: number): void {
+    this.apiService.removeFromCart(productId).subscribe((cart) => {
+      this.cartItems = cart;
+      this.filteredCartItems = [...this.cartItems];
+      this.calculateTotals();
+    });
+  }
+
+  updateCart(): void {
+    this.apiService.addToCart(this.cartItems).subscribe(() => {
+      this.calculateTotals();
+    });
+  }
+
+  calculateTotals(): void {
+    this.subtotal = this.cartItems.reduce((acc, item) => acc + item.subTotal, 0);
+    this.vat = this.subtotal * 0.05;
+    this.total = this.subtotal + this.vat;
+  }
+
+  proceedToPayment(): void {
+    alert('Proceeding to payment...');
   }
 
 }

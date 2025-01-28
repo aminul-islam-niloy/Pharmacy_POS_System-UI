@@ -1,144 +1,160 @@
-<div class="container mt-3">
-  <div class="row">
-    <!-- Header -->
-    <div class="col-12 d-flex justify-content-between align-items-center mb-3">
-      <div>
-        <h4>Invoice 360</h4>
-        <small>{{ currentDateTime }}</small>
-      </div>
-      <div>
-        <button class="btn btn-outline-secondary">Report</button>
-        <button class="btn btn-outline-secondary">Return</button>
-        <button class="btn btn-outline-secondary">Recent</button>
-        <button class="btn btn-outline-warning">Draft (0)</button>
-        <button class="btn btn-outline-danger">Exit</button>
-      </div>
-    </div>
-
-    <!-- Search Bar -->
-    <div class="col-md-6 mb-3">
-      <input
-      type="text"
-      class="form-control"
-      placeholder="Search by Product Name, Generic, Barcode..."
-      [(ngModel)]="searchText"
-      (input)="searchProduct()"
-    />
-
-
-    <div class="col-md-2">
-      <div class="dropdown">
-        <button
-          class="btn btn-secondary dropdown-toggle w-100"
-          type="button"
-          id="brandDropdown"
-          data-bs-toggle="dropdown"
-          aria-expanded="false"
-        >
-          Select Brand
-        </button>
-        <ul class="dropdown-menu w-100" aria-labelledby="brandDropdown">
-          <li
-            *ngFor="let brand of brands"
-            class="dropdown-item d-flex justify-content-between align-items-center"
-            (click)="filterByBrand(brand.id)">
-            {{ brand.name }}
-
-          </li>
-        </ul>
-      </div>
-    </div>
-    
-    
-    </div>
-
-    <!-- Categories Filter -->
-    <div class="col-md-2">
-      <h5>Category</h5>
-      <ul class="list-group">
-        <li
-          *ngFor="let category of categories"
-          class="list-group-item"
-          (click)="filterByCategory(category.id)"
-        >
-          {{ category.name }}
-        </li>
-      </ul>
-    </div>
-
- 
-
-    <!-- Products -->
-    <div class="col-md-6">
-      <h5>Total Products</h5>
-      <div class="row">
-        <div *ngFor="let product of filteredProducts" class="col-md-4 mb-3">
-          <div class="card h-100">
-            <img
-              [src]="product.imageUrl || 'https://via.placeholder.com/150'"
-              class="card-img-top"
-              alt="{{ product.name }}"
-            />
-            <div class="card-body text-center">
-              <h6 class="card-title">{{ product.name }}</h6>
-              <p class="card-text">
-                <strong>Price:</strong> {{ product.price | currency }}
-                <span *ngIf="product.discount" class="text-danger">
-                  ({{ product.discount }}% Off)
-                </span>
-              </p>
-              <p class="text-muted">Stock: {{ product.stockQuantity }}</p>
-              <button
-                class="btn btn-primary btn-sm"
-                [disabled]="product.stock === 0"
-              >
-                Add to Cart
-              </button>
-            </div>
+<div class="custum_container">
+  <div class="row header-row">
+      <div class="col-12 d-flex justify-content-between align-items-center">
+          <div class="brand-section d-flex align-items-center">
+              <img src="../../../assets/invoice 360.png" alt="Logo" class="brand-logo" />
+              <div>
+                  <div class="button-group">
+                      <h4 class="brand-title">Invoice 360</h4>
+                      <button class="time-section action-btn recent-btn">⌨️</button>
+                      <small class="time-section action-btn report-btn">{{ currentDateTime }}</small>
+                  </div>
+              </div>
           </div>
+          <div class="button-group">
+              <button class="action-btn report-btn">Report</button>
+              <button class="action-btn return-btn">Return</button>
+              <button class="action-btn recent-btn">Recent</button>
+              <button class="action-btn draft-btn">Draft (0)</button>
+              <button class="action-btn exit-btn">Exit</button>
+          </div>
+      </div>
+  </div>
+
+  <div class="row">
+      <div class="col-md-6">
+          <input type="text" class="form-control serarch-Section" placeholder="🔍 Search by Product Name, Generic, Barcode..." [(ngModel)]="searchText"(input)="searchProduct()" />
+
+          <div class="row d-flex ">
+              <div class="col-md-4">
+                  <h6>All Medicine</h6>
+              </div>
+              <div class="col-md-4">
+                  <h6>Total Products ( {{ filteredProducts.length }} )</h6>
+              </div>
+      
+
+              <div class="col-md-4">
+                  <div class="dropdown">
+                      <button class="dropdown-toggle w-100"
+                              type="button"
+                              id="brandDropdown"
+                              data-bs-toggle="dropdown"
+                              aria-expanded="false">
+                         Select Brand
+                      </button>
+                      <ul class="dropdown-menu w-100" aria-labelledby="brandDropdown">
+                          <li *ngFor="let brand of brands"
+                              class="dropdown-item d-flex justify-content-between align-items-center"
+                              (click)="filterByBrand(brand.id)">
+                              {{ brand.name }}
+                          </li>
+                      </ul>
+                  </div>
+              </div>
+
+          </div>
+        </div>
+          <div class="col-md-6">
+              <input type="text" class="form-control serarch-Section" placeholder="Search by Product Name, Generic, Barcode..." [(ngModel)]="searchText" (input)="searchProduct()" />
+
+          </div>
+     
+        </div>
+    
+
+
+  <div class="row mt-2">
+
+      <div class="col-md-2 ">
+
+          <ul class="list-group category-list">
+              <li *ngFor="let category of categories"
+                  class="list-group-item"
+                  (click)="filterByCategory(category.id)">
+                  {{ category.name }}
+              </li>
+          </ul>
+      </div>
+
+      <div class="col-md-4 product-section">
+
+          <div class="row">
+              <div *ngFor="let product of filteredProducts" class="col-md-4 mb-3">
+                  <div class="card">
+                      <img [src]="product.imageUrl || 'https://via.placeholder.com/150'"
+                           class="card-img-top" />
+                      <div class="card-body text-center">
+                          <h6 class="card-title">{{ product.name }}</h6>
+                          <p class="card-text">
+                             Price:{{ product.price | currency }}
+                              <span *ngIf="product.discount" class="text-danger">
+                                  ({{ product.discount }}% Off)
+                              </span>
+                          </p>
+                          <p class="text-muted">Stock: {{ product.stockQuantity }}</p>
+
+                      </div>
+                  </div>
+              </div>
+          </div>
+      </div>
+
+      <div class="col-md-6">
+          <h5>Cart</h5>
+          <table class="table table-bordered">
+              <thead>
+                  <tr>
+                      <th>Item</th>
+                      <th>Qty</th>
+                      <th>Price</th>
+                      <th>Discount</th>
+                      <th>SubTotal</th>
+                      <th>Actions</th>
+                  </tr>
+              </thead>
+              <tbody>
+                  <tr>
+                      <td></td>
+                      <td>
+                          <div class="input-group">
+                              <button class="btn btn-outline-secondary btn-sm">-</button>
+                              <input type="text" class="form-control text-center" readonly />
+                              <button class="btn btn-outline-secondary btn-sm">+</button>
+                          </div>
+                      </td>
+
+                      <td>
+                          <button class="btn btn-danger btn-sm">
+                              <i class="bi bi-trash"></i>
+                          </button>
+                      </td>
+                  </tr>
+              </tbody>
+          </table>
+          <div>
+              <p><strong>Subtotal:</strong></p>
+              <p><strong>VAT</strong></p>
+              <p><strong>Discount:</strong></p>
+              <p><strong>Adjustment</strong></p>
+            
+          </div>
+          <button class="btn btn-success w-100">Proceed to Payment</button>
+      </div>
+
+      <div class="footer-row d-flex justify-content-between align-items-center p-3">
+        <div class="button-group">
+          <button class="action-btn">RESET</button>
+          <button class="action-btn">ADD INFO</button>
+          <button class="action-btn">ADD PRODUCT </button>
+          <button class="action-btn">TOTAL</button>
+          <button class="action-btn">INFO</button>
+          <button class="action-btn">Terms of Service</button>
         </div>
       </div>
     </div>
-
-    <!-- Cart -->
-    <div class="col-md-4">
-      <h5>Cart</h5>
-      <table class="table table-bordered">
-        <thead>
-          <tr>
-            <th>Item</th>
-            <th>Qty</th>
-            <th>Price</th>
-            <th>Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td></td>
-            <td>
-              <div class="input-group">
-                <button class="btn btn-outline-secondary btn-sm">-</button>
-                <input type="text" class="form-control text-center" readonly />
-                <button class="btn btn-outline-secondary btn-sm">+</button>
-              </div>
-            </td>
-
-            <td>
-              <button class="btn btn-danger btn-sm">
-                <i class="bi bi-trash"></i>
-              </button>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-      <div>
-        <p><strong>Subtotal:</strong></p>
-        <p><strong>VAT/Tax:</strong></p>
-        <p><strong>Total:</strong></p>
-      </div>
-      <button class="btn btn-success w-100">Proceed to Payment</button>
-    </div>
   </div>
-</div>
+
+
 
 
