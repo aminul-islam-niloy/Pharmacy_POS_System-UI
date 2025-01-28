@@ -146,7 +146,7 @@
         <div class="button-group">
           <button class="action-btn">RESET</button>
           <button class="action-btn">ADD INFO</button>
-          <button class="action-btn">ADD PRODUCT </button>
+          <button class="action-btn" (click)="openAddProductModal()">ADD PRODUCT</button>
           <button class="action-btn">TOTAL</button>
           <button class="action-btn">INFO</button>
           <button class="action-btn">Terms of Service</button>
@@ -157,4 +157,113 @@
 
 
 
+  <div
+  *ngIf="showModal"
+  class="modal fade show"
+  style="display: block; background: rgba(0, 0, 0, 0.5);"
+  id="addProductModal"
+  tabindex="-1"
+  aria-labelledby="addProductModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="addProductModalLabel">Add New Product</h5>
+        <button
+          type="button"
+          class="btn-close"
+          (click)="closeAddProductModal()"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="modal-body">
+        <form #addProductForm="ngForm" (ngSubmit)="addProduct(addProductForm)">
+          <div class="mb-3">
+            <label for="name" class="form-label">Product Name</label>
+            <input
+              type="text"
+              id="name"
+              class="form-control"
+              name="name"
+              [(ngModel)]="newProduct.name"
+              required
+            />
+          </div>
+          <div class="mb-3">
+            <label for="category" class="form-label">Category</label>
+            <select
+              id="category"
+              class="form-select"
+              name="categoryId"
+              [(ngModel)]="newProduct.categoryId"
+              required
+            >
+              <option
+                *ngFor="let category of categories"
+                [value]="category.id"
+              >
+                {{ category.name }}
+              </option>
+            </select>
+          </div>
+          <div class="mb-3">
+            <label for="price" class="form-label">Price</label>
+            <input
+              type="number"
+              id="price"
+              class="form-control"
+              name="price"
+              [(ngModel)]="newProduct.price"
+              required
+            />
+          </div>
+          <div class="mb-3">
+            <label for="stockQuantity" class="form-label">Stock Quantity</label>
+            <input
+              type="number"
+              id="stockQuantity"
+              class="form-control"
+              name="stockQuantity"
+              [(ngModel)]="newProduct.stockQuantity"
+              required
+            />
+          </div>
+          <div class="mb-3">
+            <label for="barcode" class="form-label">Barcode</label>
+            <input
+              type="text"
+              id="barcode"
+              class="form-control"
+              name="barcode"
+              [(ngModel)]="newProduct.barcode"
+            />
+          </div>
 
+          <div class="mb-3">
+            <label for="generic" class="form-label">Generic</label>
+            <input type="text" id="generic" class="form-control" name="generic" [(ngModel)]="newProduct.generic" required />
+          </div>
+          
+          <div class="mb-3">
+            <label for="imageUrl" class="form-label">Image URL</label>
+            <input
+              type="text"
+              id="imageUrl"
+              class="form-control"
+              name="imageUrl"
+              [(ngModel)]="newProduct.imageUrl"
+            />
+          </div>
+          <button
+            type="submit"
+            class="btn btn-primary"
+            [disabled]="addProductForm.invalid"
+          >
+            Save
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

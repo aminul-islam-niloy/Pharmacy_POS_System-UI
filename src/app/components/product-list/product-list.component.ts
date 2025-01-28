@@ -3,13 +3,16 @@ import { ApiService } from '../../services/api.service';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
+//import bootstrap from '../../../main.server';
+import * as bootstrap from 'bootstrap';
+
 
 
 @Component({
   selector: 'app-product-list',
   standalone: true,
   imports: [ CommonModule,
-    FormsModule,],
+    FormsModule],
   templateUrl: './product-list.component.html',
   styleUrls: ['./product-list.component.css'],
 })
@@ -29,6 +32,17 @@ export class ProductListComponent implements OnInit {
   subtotal: number = 0;
   vat: number = 0;
   total: number = 0;
+
+  newProduct = {
+    name: '',
+    categoryId: null,
+    price: null,
+    stockQuantity: null,
+    barcode: '',
+    generic: '',
+    imageUrl: '',
+  };
+  showModal: boolean = false;
   
 
   constructor(private apiService: ApiService) {}
@@ -51,6 +65,9 @@ export class ProductListComponent implements OnInit {
     this.apiService.getCategories().subscribe((data) => {
       this.categories = data;
     });
+
+    this.apiService.getProducts().subscribe((data) => (this.products = data));
+    this.apiService.getCategories().subscribe((data) => (this.categories = data));
 
     this.apiService.getBrands().subscribe((data) => {
       this.brands = data;
@@ -190,6 +207,40 @@ export class ProductListComponent implements OnInit {
 
   proceedToPayment(): void {
     alert('Proceeding to payment...');
+  }
+
+
+  openAddProductModal(): void {
+    this.showModal = true; // Show modal
+  }
+
+  closeAddProductModal(): void {
+    this.showModal = false; // Hide modal
+    this.resetForm();
+  }
+
+  addProduct(form: any): void {
+    if (form.valid) {
+      this.apiService.addProduct(this.newProduct).subscribe(() => {
+        console.log('Product added successfully');
+        this.fetchData();
+        this.closeAddProductModal();
+      }, (error) => {
+        console.error('Error adding product:', error);
+      });
+    }
+  }
+
+  resetForm(): void {
+    this.newProduct = {
+      name: '',
+      categoryId: null,
+      price: null,
+      stockQuantity: null,
+      barcode: '',
+      generic: '',
+      imageUrl: '',
+    };
   }
 
 }

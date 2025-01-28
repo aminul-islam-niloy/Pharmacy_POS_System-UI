@@ -21,7 +21,9 @@ export class ApiService {
   getProducts(): Observable<any> {
     return this.http.get(`${this.baseUrl}/Product`);
   }
-
+  addProduct(product: any): Observable<any> {
+    return this.http.post(`${this.baseUrl}/Product`, product);
+  }
   addOrder(order: any): Observable<any> {
     return this.http.post(`${this.baseUrl}/Order`, order);
   }
