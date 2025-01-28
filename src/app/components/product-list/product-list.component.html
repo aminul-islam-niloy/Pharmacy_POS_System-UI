@@ -16,43 +16,45 @@
     </div>
 
     <!-- Search Bar -->
-    <div class="col-md-12 mb-3">
+    <div class="col-md-6 mb-3">
       <input
-        type="text"
-        class="form-control"
-        placeholder="Search by Product Name, Generic, Barcode..."
-      />
+      type="text"
+      class="form-control"
+      placeholder="Search by Product Name, Generic, Barcode..."
+      [(ngModel)]="searchText"
+      (input)="searchProduct()"
+    />
 
-      <div class="col-md-2">
-        <h5>Filter by Brand</h5>
-        <div class="dropdown">
-          <button
-            class="btn btn-secondary dropdown-toggle w-100"
-            type="button"
-            id="brandDropdown"
-            data-bs-toggle="dropdown"
-            aria-expanded="false"
-          >
-            Select Brand
-          </button>
-          <ul class="dropdown-menu w-100" aria-labelledby="brandDropdown">
-            <li
-              *ngFor="let brand of brands"
-              class="dropdown-item d-flex justify-content-between align-items-center"
-              (click)="filterByBrand(brand.id)"
-            >
-              {{ brand.name }}
-              <span class="badge bg-primary rounded-pill">{{ brand.count }}</span>
-            </li>
-          </ul>
-        </div>
+
+    <div class="col-md-2">
+      <div class="dropdown">
+        <button
+          class="btn btn-secondary dropdown-toggle w-100"
+          type="button"
+          id="brandDropdown"
+          data-bs-toggle="dropdown"
+          aria-expanded="false"
+        >
+          Select Brand
+        </button>
+        <ul class="dropdown-menu w-100" aria-labelledby="brandDropdown">
+          <li
+            *ngFor="let brand of brands"
+            class="dropdown-item d-flex justify-content-between align-items-center"
+            (click)="filterByBrand(brand.id)">
+            {{ brand.name }}
+
+          </li>
+        </ul>
       </div>
-      
+    </div>
+    
+    
     </div>
 
     <!-- Categories Filter -->
     <div class="col-md-2">
-      <h5>Filter by Category</h5>
+      <h5>Category</h5>
       <ul class="list-group">
         <li
           *ngFor="let category of categories"
@@ -64,7 +66,7 @@
       </ul>
     </div>
 
-    <!-- Brands Filter -->
+ 
 
     <!-- Products -->
     <div class="col-md-6">
@@ -85,7 +87,7 @@
                   ({{ product.discount }}% Off)
                 </span>
               </p>
-              <p class="text-muted">Stock: {{ product.stock }}</p>
+              <p class="text-muted">Stock: {{ product.stockQuantity }}</p>
               <button
                 class="btn btn-primary btn-sm"
                 [disabled]="product.stock === 0"
@@ -138,3 +140,5 @@
     </div>
   </div>
 </div>
+
+
