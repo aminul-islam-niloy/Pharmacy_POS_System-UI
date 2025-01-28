@@ -47,7 +47,9 @@
   font-size: 16px;
   font-weight: bold;
 }
-
+.category-section {
+  min-width: 160px;
+}
 .category-list {
   list-style: none;
   padding: 0;
@@ -55,53 +57,54 @@
 
 .category-list .list-group-item {
   cursor: pointer;
-  height: 50px;
+  font-size: 0.9rem;
+  font-weight:500;
+  height: 45px;
   transition: background-color 0.3s ease-in-out;
 }
 
 .category-list .list-group-item:hover {
-  background-color: #d1ecf1;
-  color: #007bff;
+  background-color: #eeefef;
+  color: #000000;
 }
 
-/* .product-section {
-  padding: 10px;
-  border-left: 1px solid #ddd;
-  border-right: 1px solid #ddd;
-} */
 
 .card {
-  height: 160px;
-  width: 120px;
+  height: 130px;
+  width: 130px;
   border-radius: 0.75rem;
   box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
 }
 
-.card-img-top {
-  max-height: 20px;
-  object-fit: cover;
-  border-radius: 50px;
-  justify-content: center;
+
+
+.product-image {
+  margin-left: 10px;
+  margin-top: 10px;
+  width: 40px; 
+  height: 40px;
+  border-radius: 50%; 
+  object-fit: cover; 
+  border: 1px solid #ccc;
 }
 
 .card-title{
+  margin-left: 5px;
   font-size: 0.8rem;
+  font-weight: bold;
 }
+
 .card-text{
+  margin-left: 5px;
   font-size: 0.8rem;
+  font-weight: bold;
 }
+
 
 .text-muted{
   font-size: 0.8rem;
 }
 
-.cart-section {
-  background-color: #f9f9f9;
-  border-radius: 5px;
-  padding: 5px;
-  height: 100px;
-  width: 100px;
-}
 
 .serarch-Section {
   margin-bottom: 15px;
@@ -109,3 +112,100 @@
   border-radius: 5px;
   border: 1px solid #ccc;
 }
+
+.discount{
+  font-size: 0.7rem;
+  font-weight: bold;
+}
+
+.stock {
+  font-weight: bold;
+}
+
+.stock-alart{
+  margin-left: 10px;
+  margin-top: 10px;
+  font-weight: bold;
+  font-size: 0.8rem;
+}
+
+.text-success {
+  color: green;
+}
+
+.text-danger {
+  color: red;
+}
+
+
+.custom-modal {
+  max-width: 800px;
+  height: 600px;
+  margin: auto;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.modal-header {
+  background-color: #f8f9fa;
+  border-bottom: 1px solid #dee2e6;
+}
+
+.modal-body {
+  padding: 20px;
+}
+
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.form-label {
+  font-weight: 500;
+  margin-bottom: 5px;
+}
+
+.form-control,
+.form-select {
+  padding: 8px;
+  font-size: 14px;
+  border: 1px solid #ced4da;
+  border-radius: 5px;
+}
+
+.scrollable-container {
+  max-height: 550px; 
+  overflow-y: auto; 
+  overflow-x: hidden; 
+  scrollbar-width: thin; 
+  scrollbar-color: #ccc transparent; 
+}
+
+.scrollable-container::-webkit-scrollbar {
+  width: 8px; 
+}
+
+.scrollable-container::-webkit-scrollbar-thumb {
+  background-color: #ccc; 
+  border-radius: 4px; 
+}
+
+.scrollable-container::-webkit-scrollbar-thumb:hover {
+  background-color: #aaa; 
+}
+
+.scrollable-container::-webkit-scrollbar-track {
+  background-color: transparent; 
+}
+
+
+
+
+
+

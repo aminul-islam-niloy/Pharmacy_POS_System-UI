@@ -21,8 +21,13 @@ export class ApiService {
   getProducts(): Observable<any> {
     return this.http.get(`${this.baseUrl}/Product`);
   }
-  addProduct(product: any): Observable<any> {
-    return this.http.post(`${this.baseUrl}/Product`, product);
+ 
+  addProduct(formData: FormData): Observable<any> {
+    return this.http.post(`${this.baseUrl}/Product`, formData);
+  }
+
+  getProductImageUrl(productId: number): string {
+    return `${this.baseUrl}/Product/${productId}/image`;
   }
   addOrder(order: any): Observable<any> {
     return this.http.post(`${this.baseUrl}/Order`, order);

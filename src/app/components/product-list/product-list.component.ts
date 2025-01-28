@@ -1,12 +1,8 @@
-import { Component, OnInit, importProvidersFrom } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { ApiService } from '../../services/api.service';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, NgForm } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
-//import bootstrap from '../../../main.server';
-import * as bootstrap from 'bootstrap';
-
-
 
 @Component({
   selector: 'app-product-list',
@@ -33,15 +29,21 @@ export class ProductListComponent implements OnInit {
   vat: number = 0;
   total: number = 0;
 
-  newProduct = {
+  newProduct: any = {
     name: '',
     categoryId: null,
     price: null,
     stockQuantity: null,
     barcode: '',
     generic: '',
-    imageUrl: '',
+    discount: 0,
+    vat: 0,
   };
+
+  selectedFile: File | null = null;
+
+
+
   showModal: boolean = false;
   
 
@@ -193,10 +195,26 @@ export class ProductListComponent implements OnInit {
     });
   }
 
-  updateCart(): void {
-    this.apiService.addToCart(this.cartItems).subscribe(() => {
-      this.calculateTotals();
-    });
+
+
+  increaseQuantity(item: any) {
+    item.quantity++;
+    this.updateCart();
+  }
+  
+  decreaseQuantity(item: any) {
+    if (item.quantity > 1) {
+      item.quantity--;
+      this.updateCart();
+    }
+  }
+  
+
+  updateCart() {
+    this.subtotal = this.cartItems.reduce((sum, item) => sum + (item.price - item.discount) * item.quantity, 0);
+    this.totalDiscount = this.cartItems.reduce((sum, item) => sum + item.discount * item.quantity, 0);
+    this.vat = this.subtotal * 0.15; // 15% VAT
+    this.adjustment = 0;
   }
 
   calculateTotals(): void {
@@ -216,31 +234,53 @@ export class ProductListComponent implements OnInit {
 
   closeAddProductModal(): void {
     this.showModal = false; // Hide modal
-    this.resetForm();
   }
 
-  addProduct(form: any): void {
+
+  getProductImageUrl(productId: number): string {
+    return this.apiService.getProductImageUrl(productId);
+  }
+  onFileSelected(event: any): void {
+    this.selectedFile = event.target.files[0];
+  }
+
+  addProduct(form: NgForm): void {
     if (form.valid) {
-      this.apiService.addProduct(this.newProduct).subscribe(() => {
-        console.log('Product added successfully');
-        this.fetchData();
-        this.closeAddProductModal();
-      }, (error) => {
-        console.error('Error adding product:', error);
+      const formData = new FormData();
+      formData.append('name', this.newProduct.name);
+      formData.append('categoryId', this.newProduct.categoryId);
+      formData.append('price', this.newProduct.price);
+      formData.append('stockQuantity', this.newProduct.stockQuantity);
+      formData.append('barcode', this.newProduct.barcode);
+      formData.append('generic', this.newProduct.generic);
+      formData.append('discount', this.newProduct.discount || '0'); 
+      formData.append('vat', this.newProduct.vat || '0');        
+  
+      if (this.selectedFile) {
+        formData.append('image', this.selectedFile);
+      }
+  
+      this.apiService.addProduct(formData).subscribe(() => {
+          this.fetchData();
+      this.closeAddProductModal();
+        this.newProduct = {
+          name: '',
+          categoryId: null,
+          price: null,
+          stockQuantity: null,
+          barcode: '',
+          generic: '',
+          discount: 0,
+          vat: 0,
+        };
+        this.selectedFile = null;
+  
+ 
+        form.resetForm();
       });
     }
   }
-
-  resetForm(): void {
-    this.newProduct = {
-      name: '',
-      categoryId: null,
-      price: null,
-      stockQuantity: null,
-      barcode: '',
-      generic: '',
-      imageUrl: '',
-    };
-  }
-
+  
 }
+
+
