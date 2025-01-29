@@ -264,8 +264,7 @@ export class ProductListComponent implements OnInit {
   
   updateCart() {
     this.subtotal = this.cartItems.reduce((sum, item) => sum + (item.price - item.discount) * item.quantity, 0);
-    // this.vat = this.subtotal * 0.15; 
-    this.vat = this.cartItems.reduce((sum, item) => sum + (item.vat * item.quantity), 0);
+    
   }
   
 }
