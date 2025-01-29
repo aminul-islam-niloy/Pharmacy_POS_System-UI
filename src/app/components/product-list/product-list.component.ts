@@ -4,6 +4,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule, NgForm } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
 import { CartService } from '../../services/cart.service';
+import { Order } from '../../models/order';
 
 @Component({
   selector: 'app-product-list',
@@ -14,6 +15,7 @@ import { CartService } from '../../services/cart.service';
   styleUrls: ['./product-list.component.css'],
 })
 export class ProductListComponent implements OnInit {
+[x: string]: any;
   products: any[] = [];
   categories: any[] = [];
   brands: any[] = [];
@@ -30,6 +32,11 @@ export class ProductListComponent implements OnInit {
   vat: number = 0;
   total: number = 0;
   discount:number=0;
+
+  paymentMethod = 'Cash';
+  paymentMethods = ['Cash', 'Bank', 'MFS']; 
+  inputAmount = 0;
+  change = 0;
 
 
   newProduct: any = {
@@ -266,6 +273,33 @@ export class ProductListComponent implements OnInit {
     this.subtotal = this.cartItems.reduce((sum, item) => sum + (item.price - item.discount) * item.quantity, 0);
     
   }
+  calculateChange() {
+    this.change = this.inputAmount - this.total;
+  }
+
+  processPayment() {
+    if (this.inputAmount < this.total) {
+      alert('Insufficient Amount!');
+      return;
+    }
+  
+    const orderData: Order = {
+      orderDate: new Date(),
+      items: this.cartService.getCart(),
+      totalAmount: this.total,
+      discount: this.discount,
+      vat: this.vat,
+      paymentMethod: this.paymentMethod,
+      paidAmount: this.inputAmount,
+      changeAmount: this.inputAmount - this.total, 
+    };
+  
+    this.apiService.saveOrder(orderData).subscribe(response => {
+      alert('Order Saved Successfully!');
+      this.cartService.clearCart();
+    });
+  }
+  
   
 }
 

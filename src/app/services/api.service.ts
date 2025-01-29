@@ -1,6 +1,7 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, catchError, tap, throwError } from 'rxjs';
+import { Order } from '../models/order';
 
 @Injectable({
   providedIn: 'root',
@@ -9,7 +10,6 @@ export class ApiService {
   private baseUrl = 'https://localhost:7083/api';
 
   private httpOptions = {
-    withCredentials: true, 
     headers: new HttpHeaders({ 'Content-Type': 'application/json' }),
   };
 
@@ -28,17 +28,15 @@ export class ApiService {
   }
 
   addProduct(formData: FormData): Observable<any> {
-    return this.http.post(`${this.baseUrl}/Product`, formData, this.httpOptions);
+    return this.http.post(`${this.baseUrl}/Product`, formData);
   }
 
   getProductImageUrl(productId: number): string {
     return `${this.baseUrl}/Product/${productId}/image`;
   }
 
-  addOrder(order: any): Observable<any> {
-    return this.http.post(`${this.baseUrl}/Order`, order, this.httpOptions);
+  saveOrder(orderData: Order) {
+    return this.http.post(`${this.baseUrl}/Order/save-order`, orderData);
   }
-
-  
 
 }

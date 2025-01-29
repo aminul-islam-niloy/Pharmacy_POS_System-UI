@@ -32,6 +32,10 @@ export class CartService {
     return cart ? JSON.parse(cart) : [];
   }
 
+  public getCart(): any[] { 
+    return this.getCartFromStorage();
+  }
+
   private loadInitialCart() {
     const cart = this.getCartFromStorage();
     this.updateLocalStorage(cart);

@@ -1,12 +1,13 @@
 import { CartItem } from './cart-item';
 
 export interface Order {
+  id?: number; 
   items: CartItem[];
-  total: number;
+  orderDate: Date;
+  totalAmount: number;
   discount: number;
   vat: number;
   paymentMethod: string;
   paidAmount: number;
-  returnAmount: number;
-  dueAmount: number;
+  changeAmount: number;
 }
