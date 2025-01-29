@@ -2,7 +2,7 @@
   <div class="row header-row">
       <div class="col-12 d-flex justify-content-between align-items-center">
           <div class="brand-section d-flex align-items-center">
-              <img src="../../../assets/invoice 360.png" alt="Logo" class="brand-logo" />
+              <img src="logo.png" alt="Logo" class="brand-logo" />
               <div>
                   <div class="button-group">
                       <h4 class="brand-title">Invoice 360</h4>
@@ -43,7 +43,7 @@
                               aria-expanded="false">
                          Select Brand
                       </button>
-                      <ul class="dropdown-menu w-100" aria-labelledby="brandDropdown">
+                      <ul class="dropdown-menu w-100  " aria-labelledby="brandDropdown">
                           <li *ngFor="let brand of brands"
                               class="dropdown-item d-flex justify-content-between align-items-center"
                               (click)="filterByBrand(brand.id)">
@@ -55,123 +55,122 @@
 
           </div>
         </div>
-          <div class="col-md-6">
+          <div class="col-md-6 text-right">
               <input type="text" class="form-control serarch-Section" placeholder="Search by  Barcode..." [(ngModel)]="searchText" (input)="searchProduct()" />
-
+              <input type="text" class="form-control serarch-Section" placeholder="Search by  Barcode..." [(ngModel)]="searchText" (input)="searchProduct()" />
           </div>
-     
         </div>
-    
 
-
-  <div class="row mt-2">
+  <div class="row ">
  
-    <div class="col-md-1 category-section">
+    <div class="col-md-2 category-section">
         <ul class="list-group category-list">
           <li *ngFor="let category of categories" class="list-group-item" (click)="filterByCategory(category.id)">
             {{ category.name }}
           </li>
         </ul>
-      </div>
+    </div>
 
-      <div class="col-md-4 product-section scrollable-container">
-        <div class="row">
-          <div *ngFor="let product of filteredProducts" class="col-md-4 mb-3">
-            <div class="card" (click)="addToCart(product)" style="cursor: pointer;">
-              <div class="d-flex btn-group">
-                <div>
-                  <img *ngIf="product.id" [src]="getProductImageUrl(product.id)" class="product-image" />
-                </div>
-                <div style="justify-content: end;">
-                  <p class="stock-alart">
-                    {{ product.stockQuantity > 0 ? 'In stock ' + product.stockQuantity : 'Out of stock' }}
-                  </p>
-                  <p
-                    class="quantity"
-                    [ngClass]="{
-                      'text-danger': product.stockQuantity === 0,
-                      'text-success': product.stockQuantity > 0
-                    }"
-                  ></p>
-                  <p *ngIf="product.discount" class="stock-alart text-danger">
-                    {{ product.discount }}% Off
-                  </p>
-                </div>
+    <div class="col-md-4 product-section scrollable-container">
+      <div class="row">
+        <div *ngFor="let product of filteredProducts" class="col-lg-4 col-md-2 mb-3">
+          <div class="card" [ngClass]="{ 'disabled': product.stockQuantity === 0 }" 
+          (click)="product.stockQuantity > 0 && addToCart(product)" 
+          style="cursor: pointer;"  (click)="addToCart(product)" style="cursor: pointer; ">
+            <div class="d-flex">
+              <div>
+                <img *ngIf="getProductImageUrl(product.id) !== ''" 
+                     [src]="getProductImageUrl(product.id)" 
+                     class="product-image" 
+                     onerror="this.onerror=null; this.src='demo.jpg';" />
               </div>
-              <div class="card-body">
-                <h6 class="card-title">{{ product.name }}</h6>
-                <p class="card-text">Tk: {{ product.price }}</p>
+              <div class="product-info">
+                <span class="stock-alart">
+                  {{ product.stockQuantity > 0 ? 'In stock ' + product.stockQuantity : 'Out of stock' }}
+                </span>
+                <span class="quantity">{{ product.quantity }}</span>
+                <span class="discount" 
+                  [ngClass]="{'text-danger': product.stockQuantity === 0, 'text-success': product.stockQuantity > 0 }">
+                  {{ product.discount ? product.discount + '% Off' : '' }}
+                </span>
               </div>
             </div>
-          </div>
-        </div>
-      </div>
-      
-  
-      <div class="col-md-6">
-          <h5>Cart</h5>
-          <table class="table table-bordered">
-            <thead>
-              <tr>
-                <th>No</th>
-                <th>Item</th>
-                <th>Quantity</th>
-                <th>Price</th>
-                <th>Discount</th>
-                <th>SubTotal</th>
-                <th>Actions</th>
-              </tr>
-            </thead>
-            <tbody >
-              <tr *ngFor="let item of cartItems; let i = index">
-                <td>{{ i + 1 }}</td> 
-               <td class="items-name"> {{ item.productName }}</td>
-                <td>
-                  <div class="input-group">
-                    <button (click)="decreaseQty(item)" class="btn btn-outline-secondary btn-sm">-</button>
-                    <input type="text" class="form-control text-center" [value]="item.quantity" readonly />
-                    <button (click)="increaseQty(item)" class="btn btn-outline-secondary btn-sm">+</button>
-                  </div>
-                </td>
-                <td>{{ item.price | currency }}</td>
-                <td>{{ item.discount | currency }}</td>
-                <td>{{ (item.price * item.quantity - item.discount * item.quantity) | currency }}</td>
-                <td>
-                  <button (click)="removeFromCart(item.productId)" class="btn btn-danger btn-sm">
-                    &#xF5DE;
-                  </button>
-                </td>
-              </tr>
-            </tbody>
-          </table>
-          <div class="d-flex">
-            <div>
-            <p><strong>Subtotal:</strong> {{ subtotal | currency }}</p>
-            <p><strong>VAT:</strong> {{ vat | currency }}</p>
-        
-          </div>
-          <div class="cartitmes-footer-right">
-            <p><strong>Discount:</strong> {{ discount | currency }}</p>
-            <p><strong>Total:</strong> {{ total | currency }}</p>
-          </div>
-          </div>
-         <button class="btn btn-success w-100 mt-3" data-bs-toggle="offcanvas" data-bs-target="#paymentDrawer">
-  Proceed to Payment
-</button>
-      </div>
+            <div class="cart-body mt-3">
+              <p class="card-title">{{ product.name }}</p>
+              <p class="card-text">Tk: {{ product.price }}</p>
+            </div>
 
-      <div class="footer-row d-flex justify-content-between align-items-center p-3">
-        <div class="button-group">
-          <button class="btn btn-warning " (click)="resetCart()">Reset Cart</button>
-          <button class="action-btn">ADD INFO</button>
-          <button class="action-btn" (click)="openAddProductModal()">ADD PRODUCT</button>
-          <button class="action-btn"> {{ total | currency }}</button>
-          <button class="action-btn">INFO</button>
-          <button class="action-btn">Terms of Service</button>
+          </div>
         </div>
       </div>
     </div>
+    
+      
+    <div class="col-md-6">
+      <div class="table-container">
+        <table class="table table-bordered">
+          <thead class="header-text">
+            <tr>
+              <th>No</th>
+              <th>Item</th>
+              <th>Quantity</th>
+              <th>Price</th>
+              <th>Discount</th>
+              <th>SubTotal</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let item of cartItems; let i = index">
+              <td>{{ i + 1 }}</td>
+              <td class="items-name">{{ item.productName }}</td>
+              <td>
+                <div class="input-group quantity-group">
+                  <button (click)="decreaseQty(item)" class="btn btn-decrease">-</button>
+                  <span class="quantityinTable">{{ item.quantity }}</span>
+                  <button (click)="increaseQty(item)" class="btn btn-increase ">+</button>
+                </div>
+              </td>
+              <td>{{ item.price | currency }}</td>
+              <td>{{ item.discount | currency }}</td>
+              <td>{{ (item.price * item.quantity - item.discount * item.quantity) | currency }}</td>
+              <td>
+                <button (click)="removeFromCart(item.productId)" class="btn btn-danger btn-sm">
+                  <i class="bi bi-trash"></i>
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="d-flex TableButton-cart">
+        <div>
+          <p ><strong class="tablesection-div-left">Subtotal:</strong> {{ subtotal | currency }}</p>
+          <p ><strong class="tablesection-div-right">VAT:</strong> {{ vat | currency }}</p>
+        </div>
+        <div class="cartitmes-footer-right">
+          <p><strong class="tablesection-div-left">Discount:</strong> {{ discount | currency }}</p>
+          <p><strong class="tablesection-div-right">Total:</strong> {{ total | currency }}</p>
+        </div>
+      </div>
+
+
+    </div>
   </div>
+      <div class=" d-flex justify-content-between align-items-center">
+        <div class="button-group">
+          <button class="btn btn-warning" style="margin-left: 100px;" (click)="resetCart()">Reset Cart</button>
+          <button class="action-btn">ADD INFO</button>
+          <button class="action-btn" (click)="openAddProductModal()">ADD PRODUCT</button>
+          <button class="action-btn"> {{ total | currency }}</button>
+          <button class="action-btn ">INFO</button>
+          <button class="btn btn-primary "><i class="bi bi-calculator"></i> Calculate</button>
+          <button class="btn btn-danger"data-bs-toggle="offcanvas" data-bs-target="#paymentDrawer" ><i class="bi bi-credit-card"></i> Proceed to Payment</button>
+        </div>
+      </div>
+    </div>
+
 
   
 
@@ -307,10 +306,7 @@
             <button
               type="submit"
               class="btn btn-primary w-100"
-              [disabled]="addProductForm.invalid"
-            >
-              Save Product
-            </button>
+              [disabled]="addProductForm.invalid">Save Product</button>
           </div>
         </form>
       </div>
@@ -319,7 +315,7 @@
 </div>
 
 
-<div class="offcanvas offcanvas-end" tabindex="-1" id="paymentDrawer" aria-labelledby="paymentDrawerLabel">
+<div class="offcanvas offcanvas-end offcanvasSection" tabindex="-1" id="paymentDrawer" aria-labelledby="paymentDrawerLabel">
   <div class="offcanvas-header">
     <h5 id="paymentDrawerLabel">Order Payment</h5>
     <button type="button" class="btn-close" data-bs-dismiss="offcanvas"></button>
@@ -330,14 +326,22 @@
     <p><strong>Total:</strong> {{ total | currency }}</p>
   </div>
 
+
   <div class="mt-2">
     <label for="paymentMethod">Payment Method:</label>
-    <select class="form-select" [(ngModel)]="paymentMethod">
-      <option *ngFor="let method of paymentMethods" [value]="method">{{ method }}</option>
-    </select>
+    <div class="payment-options">
+      <div
+        *ngFor="let method of paymentMethods"
+        class="payment-box"
+        [ngClass]="{ 'selected': paymentMethod === method.name }"
+        (click)="selectPaymentMethod(method.name)"
+      >
+        <img [src]="method.image" [alt]="method.name" />
+        <p>{{ method.name }}</p>
+      </div>
+    </div>
   </div>
-
-
+  
   <div class="offcanvas-body">
     <p><strong>Subtotal:</strong> {{ subtotal | currency }}</p>
     <p><strong>VAT:</strong> {{ vat | currency }}</p>

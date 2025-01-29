@@ -34,7 +34,7 @@ export class ProductListComponent implements OnInit {
   discount:number=0;
 
   paymentMethod = 'Cash';
-  paymentMethods = ['Cash', 'Bank', 'MFS']; 
+
   inputAmount = 0;
   change = 0;
 
@@ -168,10 +168,11 @@ export class ProductListComponent implements OnInit {
     this.showModal = false; 
   }
 
-
   getProductImageUrl(productId: number): string {
-    return this.apiService.getProductImageUrl(productId);
+    const imageUrl = this.apiService.getProductImageUrl(productId); 
+    return imageUrl.length > 0 ? imageUrl : 'demo.jpg';
   }
+
   onFileSelected(event: any): void {
     this.selectedFile = event.target.files[0];
   }
@@ -298,6 +299,15 @@ export class ProductListComponent implements OnInit {
       alert('Order Saved Successfully!');
       this.cartService.clearCart();
     });
+  }
+
+  paymentMethods = [
+    { name: 'Cash', image: 'cash.png' },
+    { name: 'Card', image: 'credit-card.png' },
+    { name: 'Mobile Payment', image: 'mobile-banking.png' }
+  ];
+  selectPaymentMethod(method: string) {
+    this.paymentMethod = method;
   }
   
   
