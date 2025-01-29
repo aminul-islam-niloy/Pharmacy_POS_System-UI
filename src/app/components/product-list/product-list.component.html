@@ -56,7 +56,7 @@
           </div>
         </div>
           <div class="col-md-6">
-              <input type="text" class="form-control serarch-Section" placeholder="Search by Product Name, Generic, Barcode..." [(ngModel)]="searchText" (input)="searchProduct()" />
+              <input type="text" class="form-control serarch-Section" placeholder="Search by  Barcode..." [(ngModel)]="searchText" (input)="searchProduct()" />
 
           </div>
      
@@ -75,70 +75,80 @@
       </div>
 
       <div class="col-md-4 product-section scrollable-container">
-
-          <div class="row ">
-              <div *ngFor="let product of filteredProducts" class="col-md-4 mb-3">
-                  <div class="card">
-
-                    <div class="d-flex btn-group">
-                        <div >
-                            <img *ngIf="product.id"[src]="getProductImageUrl(product.id)" class="product-image"/>
-                        </div>
-                        <div style="justify-content: end;">
-                         <p class="stock-alart">  {{ product.stockQuantity > 0 ? 'In stock ' + product.stockQuantity : 'Out of stock' }}</p> 
-                        <p class="quantity" [ngClass]="{'text-danger': product.stockQuantity === 0, 'text-success': product.stockQuantity > 0}">
-                        </p>
-                        <p *ngIf="product.discount" class="stock-alart  text-danger"> {{ product.discount }}% Off </p>
-                
-                        </div>
-                      </div>
-                        <div class="card-body">
-                          <h6 class="card-title">{{ product.name }}</h6>
-                          <p class="card-text">Tk:{{ product.price}}</p>
-                        </div>
-                     
-                  </div>
+        <div class="row">
+          <div *ngFor="let product of filteredProducts" class="col-md-4 mb-3">
+            <div class="card" (click)="addToCart(product)" style="cursor: pointer;">
+              <div class="d-flex btn-group">
+                <div>
+                  <img *ngIf="product.id" [src]="getProductImageUrl(product.id)" class="product-image" />
+                </div>
+                <div style="justify-content: end;">
+                  <p class="stock-alart">
+                    {{ product.stockQuantity > 0 ? 'In stock ' + product.stockQuantity : 'Out of stock' }}
+                  </p>
+                  <p
+                    class="quantity"
+                    [ngClass]="{
+                      'text-danger': product.stockQuantity === 0,
+                      'text-success': product.stockQuantity > 0
+                    }"
+                  ></p>
+                  <p *ngIf="product.discount" class="stock-alart text-danger">
+                    {{ product.discount }}% Off
+                  </p>
+                </div>
               </div>
+              <div class="card-body">
+                <h6 class="card-title">{{ product.name }}</h6>
+                <p class="card-text">Tk: {{ product.price }}</p>
+              </div>
+            </div>
           </div>
+        </div>
       </div>
+      
   
       <div class="col-md-6">
           <h5>Cart</h5>
           <table class="table table-bordered">
-              <thead>
-                  <tr>
-                      <th>Item</th>
-                      <th>Qty</th>
-                      <th>Price</th>
-                      <th>Discount</th>
-                      <th>SubTotal</th>
-                      <th>Actions</th>
-                  </tr>
-              </thead>
-              <tbody>
-                  <tr>
-                      <td></td>
-                      <td>
-                          <div class="input-group">
-                              <button class="btn btn-outline-secondary btn-sm">-</button>
-                              <input type="text" class="form-control text-center" readonly />
-                              <button class="btn btn-outline-secondary btn-sm">+</button>
-                          </div>
-                      </td>
-
-                      <td>
-                          <button class="btn btn-danger btn-sm">
-                              <i class="bi bi-trash"></i>
-                          </button>
-                      </td>
-                  </tr>
-              </tbody>
+            <thead>
+              <tr>
+                <th>No</th>
+                <th>Item</th>
+                <th>Quantity</th>
+                <th>Price</th>
+                <th>Discount</th>
+                <th>SubTotal</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let item of cartItems; let i = index">
+                <td>{{ i + 1 }}</td> 
+               <td class="items-name"> {{ item.productName }}</td>
+                <td>
+                  <div class="input-group">
+                    <button (click)="decreaseQty(item)" class="btn btn-outline-secondary btn-sm">-</button>
+                    <input type="text" class="form-control text-center" [value]="item.quantity" readonly />
+                    <button (click)="increaseQty(item)" class="btn btn-outline-secondary btn-sm">+</button>
+                  </div>
+                </td>
+                <td>{{ item.price | currency }}</td>
+                <td>{{ item.discount | currency }}</td>
+                <td>{{ (item.price * item.quantity - item.discount * item.quantity) | currency }}</td>
+                <td>
+                  <button (click)="removeFromCart(item.productId)" class="btn btn-danger btn-sm">
+                    <i class="bi bi-trash text-danger"></i>
+                  </button>
+                </td>
+              </tr>
+            </tbody>
           </table>
           <div>
-              <p><strong>Subtotal:</strong></p>
-              <p><strong>VAT</strong></p>
-              <p><strong>Discount:</strong></p>
-              <p><strong>Adjustment</strong></p>
+            <p><strong>Subtotal:</strong> {{ subtotal | currency }}</p>
+            <p><strong>VAT:</strong> {{ vat | currency }}</p>
+            <p><strong>Discount:</strong> {{ discount | currency }}</p>
+            <p><strong>Total:</strong> {{ total | currency }}</p>
             
           </div>
           <button class="btn btn-success w-100">Proceed to Payment</button>
@@ -146,10 +156,10 @@
 
       <div class="footer-row d-flex justify-content-between align-items-center p-3">
         <div class="button-group">
-          <button class="action-btn">RESET</button>
+          <button class="btn btn-warning " (click)="resetCart()">Reset Cart</button>
           <button class="action-btn">ADD INFO</button>
           <button class="action-btn" (click)="openAddProductModal()">ADD PRODUCT</button>
-          <button class="action-btn">TOTAL</button>
+          <button class="action-btn"> {{ total | currency }}</button>
           <button class="action-btn">INFO</button>
           <button class="action-btn">Terms of Service</button>
         </div>

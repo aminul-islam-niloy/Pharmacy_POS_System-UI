@@ -137,6 +137,10 @@
   color: red;
 }
 
+.items-name{
+  font-weight: bold;
+  font-size: 0.8rem;
+}
 
 .custom-modal {
   max-width: 800px;

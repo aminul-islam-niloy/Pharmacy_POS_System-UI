@@ -3,6 +3,7 @@ import { ApiService } from '../../services/api.service';
 import { CommonModule } from '@angular/common';
 import { FormsModule, NgForm } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
+import { CartService } from '../../services/cart.service';
 
 @Component({
   selector: 'app-product-list',
@@ -28,6 +29,8 @@ export class ProductListComponent implements OnInit {
   subtotal: number = 0;
   vat: number = 0;
   total: number = 0;
+  discount:number=0;
+
 
   newProduct: any = {
     name: '',
@@ -41,13 +44,9 @@ export class ProductListComponent implements OnInit {
   };
 
   selectedFile: File | null = null;
-
-
-
   showModal: boolean = false;
   
-
-  constructor(private apiService: ApiService) {}
+  constructor(private apiService: ApiService, private cartService: CartService) {}
 
   ngOnInit(): void {
     this.fetchData();
@@ -56,12 +55,24 @@ export class ProductListComponent implements OnInit {
     setInterval(() => {
       this.updateCurrentDateTime();
     }, 1000);
+
+    this.cartService.cartItems$.subscribe(cartData => {
+      this.cartItems = cartData.cart;
+      this.subtotal = cartData.subtotal;
+      this.vat = cartData.vat;
+      this.total = cartData.total;
+      this.discount = cartData.discount;
+    });
   }
 
   fetchData(): void {
     this.apiService.getProducts().subscribe((data) => {
       this.products = data;
       this.filteredProducts = data;
+
+      this.apiService.getProducts().subscribe((data) => {
+        this.products = data;
+      });
     });
 
     this.apiService.getCategories().subscribe((data) => {
@@ -92,7 +103,6 @@ export class ProductListComponent implements OnInit {
       (product) => product.categoryId === categoryId
     );
   }
-
 
 
   filterByBrand(brandId: number | null): void {
@@ -137,91 +147,6 @@ export class ProductListComponent implements OnInit {
     this.currentDateTime = new Intl.DateTimeFormat('en-US', options).format(now);
   }
 
-  loadCart(): void {
-    this.apiService.getCartItems().subscribe((cart) => {
-      this.cartItems = cart || [];
-    });
-  }
-
-  addToCart(product: any): void {
-    const cartItem = {
-      productId: product.id,
-      name: product.name,
-      price: product.price,
-      quantity: 1,
-      subTotal: product.price,
-    };
-
-    this.apiService.addToCart(cartItem).subscribe((cart) => {
-      this.cartItems = cart;
-      alert(`${product.name} added to cart!`);
-    });
-  }
-
-  // removeFromCart(productId: number): void {
-  //   this.apiService.removeFromCart(productId).subscribe((cart) => {
-  //     this.cartItems = cart;
-  //   });
-  // }
-
-  filterCart(): void {
-    const searchLower = this.cartSearchText.toLowerCase();
-    this.filteredCartItems = this.cartItems.filter(
-      (item) => item.name.toLowerCase().includes(searchLower)
-    );
-  }
-
-  increaseQty(item: any): void {
-    item.quantity += 1;
-    item.subTotal = item.quantity * item.price;
-    this.updateCart();
-  }
-
-  decreaseQty(item: any): void {
-    if (item.quantity > 1) {
-      item.quantity -= 1;
-      item.subTotal = item.quantity * item.price;
-      this.updateCart();
-    } else {
-      this.removeFromCart(item.productId);
-    }
-  }
-
-  removeFromCart(productId: number): void {
-    this.apiService.removeFromCart(productId).subscribe((cart) => {
-      this.cartItems = cart;
-      this.filteredCartItems = [...this.cartItems];
-      this.calculateTotals();
-    });
-  }
-
-
-
-  increaseQuantity(item: any) {
-    item.quantity++;
-    this.updateCart();
-  }
-  
-  decreaseQuantity(item: any) {
-    if (item.quantity > 1) {
-      item.quantity--;
-      this.updateCart();
-    }
-  }
-  
-
-  updateCart() {
-    this.subtotal = this.cartItems.reduce((sum, item) => sum + (item.price - item.discount) * item.quantity, 0);
-    this.totalDiscount = this.cartItems.reduce((sum, item) => sum + item.discount * item.quantity, 0);
-    this.vat = this.subtotal * 0.15; // 15% VAT
-    this.adjustment = 0;
-  }
-
-  calculateTotals(): void {
-    this.subtotal = this.cartItems.reduce((acc, item) => acc + item.subTotal, 0);
-    this.vat = this.subtotal * 0.05;
-    this.total = this.subtotal + this.vat;
-  }
 
   proceedToPayment(): void {
     alert('Proceeding to payment...');
@@ -229,11 +154,11 @@ export class ProductListComponent implements OnInit {
 
 
   openAddProductModal(): void {
-    this.showModal = true; // Show modal
+    this.showModal = true;
   }
 
   closeAddProductModal(): void {
-    this.showModal = false; // Hide modal
+    this.showModal = false; 
   }
 
 
@@ -279,6 +204,68 @@ export class ProductListComponent implements OnInit {
         form.resetForm();
       });
     }
+  }
+
+  addToCart(product: any): void {
+    this.cartService.addToCart(product);
+  }
+
+  increaseQty(item: any): void {
+    this.cartService.updateQuantity(item.productId, item.quantity + 1);
+  }
+
+  decreaseQty(item: any): void {
+    if (item.quantity > 1) {
+      this.cartService.updateQuantity(item.productId, item.quantity - 1);
+    } else {
+      this.removeFromCart(item.productId);
+    }
+  }
+
+
+  calculateTotals(): void {
+    const totals = this.cartService.calculateCartTotals(this.cartItems);
+    this.subtotal = totals.subtotal;
+    this.vat = totals.vat;
+    this.total = totals.total;
+    this.discount = totals.discount;
+  }
+
+  removeFromCart(productId: number): void {
+    this.cartService.removeFromCart(productId);
+  }
+  
+  resetCart(): void {
+    this.cartService.clearCart();
+  }
+  
+  
+  increaseQuantity(item: any) {
+    item.quantity++;
+    this.updateCart();
+  }
+  
+  loadCart(): void {
+    this.cartService.cartItems$.subscribe(cartData => {
+      this.cartItems = cartData.cart;  
+      this.subtotal = cartData.subtotal;
+      this.vat = cartData.vat;
+      this.total = cartData.total;
+      this.discount = cartData.discount;
+    });
+  }
+  
+  decreaseQuantity(item: any) {
+    if (item.quantity > 1) {
+      item.quantity--;
+      this.updateCart();
+    }
+  }
+  
+  updateCart() {
+    this.subtotal = this.cartItems.reduce((sum, item) => sum + (item.price - item.discount) * item.quantity, 0);
+    // this.vat = this.subtotal * 0.15; 
+    this.vat = this.cartItems.reduce((sum, item) => sum + (item.vat * item.quantity), 0);
   }
   
 }
