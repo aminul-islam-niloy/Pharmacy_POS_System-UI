@@ -39,4 +39,8 @@ export class ApiService {
     return this.http.post(`${this.baseUrl}/Order/save-order`, orderData);
   }
 
+  getAllOrders(): Observable<Order[]> {
+    return this.http.get<Order[]>(`${this.baseUrl}/Order/get-all-orders`, this.httpOptions);
+  }
+
 }
