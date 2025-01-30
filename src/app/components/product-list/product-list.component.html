@@ -14,7 +14,7 @@
           <div class="button-group">
               <button class="btn action-btn report-btn"> <i class="bi bi-file-earmark-text gapin-btn" title="Report"></i>Report</button>
               <button class="btn action-btn return-btn"><i class="bi bi-arrow-return-left gapin-btn"></i> Return</button>
-              <button class="btn action-btn draft-btn"> <i class="bi bi-file-earmark" gapin-btn></i> Draft</button>
+              <button class="btn action-btn draft-btn"> <i class="bi bi-file-earmark  gapin-btn"></i> Draft</button>
               <button class="btn action-btn exit-btn"> <i class="bi bi-box-arrow-right gapin-btn"></i>Exit</button>
           </div>
       </div>
@@ -142,9 +142,9 @@
                                   <button (click)="increaseQty(item)" class="btn btn-increase ">+</button>
                               </div>
                           </td>
-                          <td>{{ item.price | currency }}</td>
-                          <td>{{ item.discount | currency }}</td>
-                          <td>{{ (item.price * item.quantity - item.discount * item.quantity) | currency }}</td>
+                          <td>{{ item.price }} Tk</td>
+                          <td>{{ item.discount  }} %</td>
+                          <td>{{ (item.price * item.quantity - item.discount * item.quantity)  }} Tk </td>
                           <td>
                               <button (click)="removeFromCart(item.productId)" class="btn btn-danger btn-sm">
                                   <i class="bi bi-trash"></i>
@@ -155,43 +155,54 @@
               </table>
           </div>
 
-          <div class="d-flex">
-              <div>
-                  <p><strong class="tablesection-div-left">Subtotal:</strong> {{ subtotal | currency }}</p>
-                  <p><strong class="tablesection-div-right">VAT:</strong> {{ vat | currency }}</p>
-              </div>
-              <div class="cartitmes-footer-right">
-                  <p><strong class="tablesection-div-left">Discount:</strong> {{ discount | currency }}</p>
-                  <p><strong class="tablesection-div-right">Total:</strong> {{ total | currency }}</p>
-              </div>
+          <div class="cart-summary">
+            <div>
+              <p class="tablesection-div-left mlt-2">Subtotal: <button class="btn btn-light">{{ subtotal | currency:'Tk ':'symbol'}}</button></p>
+              <p class="tablesection-div-left">VAT: <button class="btn btn-light">{{ vat |  currency:'Tk ':'symbol'  }}</button></p>
+            </div>
+            <div>
+              <p class="tablesection-div-right mlt-2">Discount: <button class="btn btn-light">{{ discount | currency:'Tk ':'symbol' }}</button></p>
+              <p class="tablesection-div-right">Total: <button class="btn btn-light">{{ total |  currency:'Tk ':'symbol'  }}</button></p>
+            </div>
           </div>
+          
 
 
       </div>
-  </div>
-
-
-  <div class="row d-flex justify-content-between align-items-center">
-     
-    <div class="col-md-6">
-      <div class="button-group">
-        <button class="btn btn-warning" (click)="resetCart()"> <i class="bi bi-arrow-counterclockwise" title="Reset"></i> Reset Cart</button>
-        <button class="action-btn">ADD INFO</button>
-        <button class="action-btn" (click)="openAddProductModal()">ADD PRODUCT</button>
-        <button class="action-btn ">INFO</button>
-       
-    </div>
-    </div>
-    <div class="col-md-6 ">
-      <div class="button-group">
-      <button class="btn btn-primary "><i class="bi bi-calculator"></i> Calculate</button>
-      <button class="btn btn-warning" (click)="resetCart()"> <i class="bi bi-arrow-counterclockwise" title="Reset"></i> Reset Cart</button>
-      <button class="action-btn"> {{ total | currency }}</button>
-      <button class="btn btn-danger" data-bs-toggle="offcanvas" data-bs-target="#paymentDrawer"><i class="bi bi-credit-card"></i> Proceed to Payment</button>
-    </div>
-  </div>
   
-  </div>
+  
+    </div>
+
+
+    <div class="row d-flex justify-content-between align-items-center">
+  
+      <div class="col-md-6">
+        <div class="footer-button-group">
+          <button class="btn btn-warning footer-custom-btn " (click)="resetCart()"> 
+            <i class="bi bi-arrow-counterclockwise gapin-btn reset-butn" title="Reset"></i>
+          </button>
+          <button class="btn footer-custom-btn btn-info">ADD INFO</button>
+          <button class="btn footer-custom-btn btn-primary" (click)="openAddProductModal()">ADD PRODUCT</button>
+          <button class="btn btn-success footer-custom-btn"> 
+            <i class="bi bi-file-earmark-text gapin-btn reset-butn"></i> 
+          </button>
+        </div>
+      </div>
+    
+      <div class="col-md-6">
+        <div class="footer-button-group">
+
+          <button class="btn btn-primary footer-custom-btn">
+            <i class="bi bi-calculator icon-calculator"></i> 
+          </button>
+          <button class="btn light-button footer-custom-btn">Total {{ total }} Tk</button>
+          <button class="btn  btn-Payment" data-bs-toggle="offcanvas" data-bs-target="#paymentDrawer">
+            Payment <span class="arrow-icon">></span>
+          </button>
+        </div>
+      </div>
+    
+    </div>
 </div>
 
 

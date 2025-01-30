@@ -433,6 +433,7 @@ font-size: 1.2rem;
 
 .table-container {
   max-height: 370px; 
+  min-height: 370px;
   overflow-y: auto; 
   overflow-x: hidden; 
   border-radius: 8px; 
@@ -458,7 +459,7 @@ font-size: 1.2rem;
   padding: 1em;
   border-radius: 50%;
   border: none;
-  background-color: #276b32;
+  background-color: #23612d;
   color: white;
   display: flex;
   align-items: center;
@@ -476,7 +477,7 @@ font-size: 1.2rem;
   font-size: 8px; 
   text-align: center;
   border: none;
-  background-color: #cd6969;
+  background-color: #ec5858;
   color: white;
   display: flex;
   align-items: center;
@@ -487,7 +488,7 @@ font-size: 1.2rem;
 }
 
 .btn-decrease:hover, .btn-increase:hover {
-  background-color: #ed4e22;
+  background-color: #2e9f80;
 }
 
 
@@ -532,4 +533,119 @@ font-size: 1.2rem;
     margin-left: 30px;
     padding-left: 30px;
     padding-right: 30px;
+  }
+
+
+
+
+
+  .cart-summary {
+    position: sticky;
+    bottom: 0;
+    background-color: #fff;
+    box-shadow: 0px -2px 2px rgba(0, 0, 0, 0.1); 
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+  }
+  
+  .cart-summary div {
+    flex: 1; 
+  }
+  
+  .tablesection-div-left,
+  .tablesection-div-right {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-weight: bold;
+    margin-left: 30px;
+    margin-right: 30px;
+  }
+
+  .mlt-2{
+    margin-top: 5px;
+  }
+
+  .icon-calculator{
+    font-size: 2rem;
+  }
+
+  .reset-butn{
+    font-size: 2rem;
+  }
+
+  .light-button{
+    background-color: #cccccc;
+    font-weight: bold;
+  }
+  
+  .cart-summary button {
+    width: 100px; 
+    padding: 5px;
+    font-size: 14px;
+  }
+  
+
+
+  .footer-button-group {
+    display: flex;
+    gap: 40px; 
+    margin-left: 40px;
+    align-items: center;
+  }
+
+
+  .footer-action-btn:hover {
+    background-color: #004D40; 
+  }
+
+  .footer-light-button {
+    background-color: #F5F5F5; 
+    color: black;
+    border-radius: 8px;
+    font-weight: bold;
+  }
+.btn-Payment{
+  min-width: 200px;
+  min-height: 60px;
+  background-color: #2e9f80;
+  color: white;
+  font-weight: bold;
+  font-size: 1rem;
+}
+
+.arrow-icon{
+  margin-left: 10px;
+  color: white;
+  font-weight: bold;
+  font-size: 1.5rem;
+}
+
+  .footer-custom-btn {
+    border-radius: 10px;
+    font-weight: bold;
+    min-height: 60px; 
+    min-width: 100px;
+  }
+
+  .btn-warning {
+    background-color: #f16c6c; 
+    border: none;
+  }
+
+  .btn-success {
+    background-color: #ed248c; 
+    border: none;
+  }
+
+  .btn-primary {
+    background-color: #1976D2; 
+    border: none;
+  }
+
+  .btn-danger {
+    background-color: #D32F2F; 
+    border: none;
   }
