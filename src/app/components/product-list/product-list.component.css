@@ -30,10 +30,63 @@
   transition: all 0.3s ease-in-out;
 }
 
+
 .action-btn:hover {
   background-color: #e9ecef;
   color: #06c6b9;
 }
+
+
+.search-container {
+  max-width: 600px;
+  margin: 5px auto; 
+  padding: 5px; 
+}
+.search-box {
+  position: relative;
+}
+.search-box .form-control {
+  padding-left: 40px; 
+}
+.search-box .search-icon {
+  position: absolute;
+  left: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #888;
+}
+.search-box .barcode-icon {
+  position: absolute;
+  left: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #888;
+  cursor: pointer;
+}
+
+.customer-line {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  max-width: 600px;
+  margin: 5px auto;
+  padding: 5px;
+  border-radius: 2px;
+}
+.customer-dropdown {
+  display: flex;
+  align-items: center;
+  min-width: 300px;
+}
+.customer-dropdown i {
+  margin-right: 10px;
+}
+.btn-custom {
+  padding: 5px 5px;
+  border-radius: 5px;
+  min-width: 290px;
+}
+
 
 .left-category {
   background-color: #f1f1f1;

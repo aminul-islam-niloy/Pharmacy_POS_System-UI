@@ -23,8 +23,13 @@
 
   <div class="row">
       <div class="col-md-6">
-          <input type="text" class="form-control serarch-Section" placeholder="🔍 Search by Product Name, Generic, Barcode..." [(ngModel)]="searchText"(input)="searchProduct()" />
-
+          <div class="search-container">
+            <div class="search-box">
+              <i class="bi bi-search search-icon"></i> 
+                <input type="text" class="form-control" placeholder="Search by Product Name, Generic, Barcode no" [(ngModel)]="searchText"(input)="searchProduct()">
+            </div>
+        </div>
+    
           <div class="row d-flex ">
               <div class="col-md-4">
                   <h6>All Medicine</h6>
@@ -55,9 +60,31 @@
 
           </div>
         </div>
-          <div class="col-md-6 text-right">
-              <input type="text" class="form-control serarch-Section" placeholder="Search by  Barcode..." [(ngModel)]="searchText" (input)="searchProduct()" />
-              <input type="text" class="form-control serarch-Section" placeholder="Search by  Barcode..." [(ngModel)]="searchText" (input)="searchProduct()" />
+          <div class="col-md-6">
+
+            <div class="customer-line">
+              <div class="customer-dropdown">
+                <i class="bi bi-person"></i>
+                  <select class="form-select">
+                      <option selected>  Working  Customer</option>
+                      <option value="1">Customer 1</option>
+                      <option value="2">Customer 2</option>
+                      <option value="3">Customer 3</option>
+                  </select>
+              </div>
+      
+              <button class=" btn-custom">
+                  <i class="bi bi-person-plus"></i> Add New Customer
+              </button>
+          </div>
+
+            <div class="search-container">
+              <div class="search-box">
+                <i class="bi bi-upc-scan barcode-icon"></i>  
+                  <input type="text" class="form-control" placeholder="Scan Barcode or Product code" [(ngModel)]="searchText"(input)="searchProduct()">
+              </div>
+          </div>
+             
           </div>
         </div>
 
