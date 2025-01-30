@@ -274,13 +274,18 @@ export class ProductListComponent implements OnInit {
     this.subtotal = this.cartItems.reduce((sum, item) => sum + (item.price - item.discount) * item.quantity, 0);
     
   }
+
   calculateChange() {
-    this.change = this.inputAmount - this.total;
+    if (this.inputAmount > this.total) {
+      this.change = this.inputAmount - this.total;
+    } else {
+      this.change = 0; 
+    }
   }
 
   processPayment() {
-    if (this.inputAmount < this.total) {
-      alert('Insufficient Amount!');
+    if (this.inputAmount ==0 ||this.inputAmount <0 ) {
+      alert('Invalid Amount!');
       return;
     }
   
@@ -298,16 +303,22 @@ export class ProductListComponent implements OnInit {
     this.apiService.saveOrder(orderData).subscribe(response => {
       alert('Order Saved Successfully!');
       this.cartService.clearCart();
+      this.clearInputFields();
     });
   }
 
   paymentMethods = [
     { name: 'Cash', image: 'cash.png' },
     { name: 'Card', image: 'credit-card.png' },
-    { name: 'Mobile Payment', image: 'mobile-banking.png' }
+    { name: 'MFS', image: 'mobile-banking.png' }
   ];
   selectPaymentMethod(method: string) {
     this.paymentMethod = method;
+  }
+
+  clearInputFields() {
+    this.inputAmount = 0; 
+    this.change = 0; 
   }
   
   
