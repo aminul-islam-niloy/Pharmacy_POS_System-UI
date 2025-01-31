@@ -94,7 +94,7 @@
           <div class="col-md-9 product-section scrollable-container">
               <div class="row">
                   <div *ngFor="let product of filteredProducts" class="col-md-4 mb-3">
-                      <div class="card" [ngClass]="{ 'disabled': product.stockQuantity === 0 }" (click)="product.stockQuantity > 0 && addToCart(product)" style="cursor: pointer;" (click)="addToCart(product)" style="cursor: pointer; ">
+                    <div class="card" [ngClass]="{ 'disabled': product.stockQuantity === 0 }" (click)="product.stockQuantity > 0 && addToCart(product)" style="cursor: pointer;">
                           <div class="d-flex">
                               <div>
                                   <img *ngIf="getProductImageUrl(product.id) !== ''" [src]="getProductImageUrl(product.id)" class="product-image" onerror="this.onerror=null; this.src='demo.jpg';" />
@@ -127,6 +127,7 @@
                           <th>Quantity</th>
                           <th>Price</th>
                           <th>Discount</th>
+                          <th>Vat</th>
                           <th>SubTotal</th>
                           <th>Actions</th>
                       </tr>
@@ -144,6 +145,7 @@
                           </td>
                           <td>{{ item.price }} Tk</td>
                           <td>{{ item.discount  }} %</td>
+                          <td>{{ item.vat  }} %</td>
                           <td>{{ (item.price * item.quantity - item.discount * item.quantity)  }} Tk </td>
                           <td>
                               <button (click)="removeFromCart(item.productId)" class="btn btn-danger btn-sm">
