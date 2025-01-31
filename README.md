@@ -43,11 +43,11 @@ API Repository: [Pharmacy POS System API](https://github.com/aminul-islam-niloy/
 
 ## Screenshots
 ### Product Listing Page
-![Product Page](./public/screenshots/Product%20Home.png/product-page.png)
-
+![Product Page](https://raw.githubusercontent.com/aminul-islam-niloy/Pharmacy_POS_System-UI/main/public/screenshots/Product%20Home.png)
 
 ### Order Placement
-![Order Page](./public/screenshots/Product%20Home.png/product-page.png)
+![Order Page](https://raw.githubusercontent.com/aminul-islam-niloy/Pharmacy_POS_System-UI/main/public/screenshots/Order%20Payment.png)
+
 
 ## Contribution
 1. Fork the repository.
