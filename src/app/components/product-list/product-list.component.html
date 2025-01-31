@@ -146,7 +146,7 @@
                           <td>{{ item.price }} Tk</td>
                           <td>{{ item.discount  }} %</td>
                           <td>{{ item.vat  }} %</td>
-                          <td>{{ (item.price * item.quantity - item.discount * item.quantity)  }} Tk </td>
+                          <td>{{ ((item.price * item.quantity) - (item.discount / 100 * item.price * item.quantity) + (item.vat / 100 * (item.price * item.quantity - item.discount / 100 * item.price * item.quantity))) | number:'1.2-2' }} Tk </td>
                           <td>
                               <button (click)="removeFromCart(item.productId)" class="btn btn-danger btn-sm">
                                   <i class="bi bi-trash"></i>

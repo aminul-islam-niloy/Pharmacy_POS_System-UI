@@ -85,14 +85,27 @@ export class CartService {
     this.cartItems.next({ cart, ...totals });
   }
 
-  public calculateCartTotals(cart: any[]): { subtotal: number, discount: number, vat: number, total: number } {
-    const subtotal = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
-    const discount = cart.reduce((sum, item) => sum + (item.discount * item.quantity), 0);
-    // const vat = subtotal * 0.15;
-    const vat = cart.reduce((sum, item) => sum + ((item.vat / 100) * item.price * item.quantity), 0);
 
+
+  public calculateCartTotals(cart: any[]): { subtotal: number, discount: number, vat: number, total: number } {
+    let subtotal = 0;
+    let discount = 0;
+    let vat = 0;
+  
+    cart.forEach(item => {
+      const itemSubtotal = item.price * item.quantity;
+      const itemDiscount = (item.discount / 100) * itemSubtotal; 
+      const itemVat = (item.vat / 100) * (itemSubtotal - itemDiscount); 
+  
+      subtotal += itemSubtotal;
+      discount += itemDiscount;
+      vat += itemVat;
+    });
+  
     const total = subtotal - discount + vat;
-    
+  
     return { subtotal, discount, vat, total };
   }
+  
+  
 }

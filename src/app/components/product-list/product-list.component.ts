@@ -216,10 +216,12 @@ export class ProductListComponent implements OnInit {
 
   addToCart(product: any): void {
     this.cartService.addToCart(product);
+    this.calculateTotals(); 
   }
 
   increaseQty(item: any): void {
     this.cartService.updateQuantity(item.productId, item.quantity + 1);
+    this.calculateTotals(); 
   }
 
   decreaseQty(item: any): void {
@@ -228,8 +230,8 @@ export class ProductListComponent implements OnInit {
     } else {
       this.removeFromCart(item.productId);
     }
+    this.calculateTotals(); 
   }
-
 
   calculateTotals(): void {
     const totals = this.cartService.calculateCartTotals(this.cartItems);
@@ -248,10 +250,7 @@ export class ProductListComponent implements OnInit {
   }
   
   
-  increaseQuantity(item: any) {
-    item.quantity++;
-    this.updateCart();
-  }
+
   
   loadCart(): void {
     this.cartService.cartItems$.subscribe(cartData => {
@@ -261,18 +260,11 @@ export class ProductListComponent implements OnInit {
       this.total = cartData.total;
       this.discount = cartData.discount;
     });
+    this.calculateTotals(); 
   }
-  
-  decreaseQuantity(item: any) {
-    if (item.quantity > 1) {
-      item.quantity--;
-      this.updateCart();
-    }
-  }
-  
+
   updateCart() {
-    this.subtotal = this.cartItems.reduce((sum, item) => sum + (item.price - item.discount) * item.quantity, 0);
-    
+    this.calculateTotals();
   }
 
   calculateChange() {
