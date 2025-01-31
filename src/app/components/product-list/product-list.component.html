@@ -100,9 +100,12 @@
                                   <img *ngIf="getProductImageUrl(product.id) !== ''" [src]="getProductImageUrl(product.id)" class="product-image" onerror="this.onerror=null; this.src='demo.jpg';" />
                               </div>
                               <div class="product-info">
-                                  <span class="stock-alart">{{ product.stockQuantity > 0 ? 'In stock ' + product.stockQuantity : 'Out of stock' }}</span>
+                                <span class="stock-alart" [ngClass]="{ 'text-success': product.stockQuantity > 0, 'text-danger': product.stockQuantity === 0 }">{{ product.stockQuantity > 0 ? 'In Stock' : 'Out of Stock' }} 
+                              </span>
+                              <span class="quantity"> {{ product.stockQuantity }} </span>
+                              
                                   <span class="quantity">{{ product.quantity }}</span>
-                                  <span class="discount" [ngClass]="{'text-danger': product.stockQuantity === 0, 'text-success': product.stockQuantity > 0 }">{{ product.discount ? product.discount + '% Off' : '' }}</span>
+                                  <span class="discount text-danger">{{ product.discount ? product.discount + '% Off' : '' }}</span>
                               </div>
                           </div>
                           <div class="cart-body mt-3">
@@ -146,7 +149,7 @@
                           <td>{{ item.price }} Tk</td>
                           <td>{{ item.discount  }} %</td>
                           <td>{{ item.vat  }} %</td>
-                          <td>{{ ((item.price * item.quantity) - (item.discount / 100 * item.price * item.quantity) + (item.vat / 100 * (item.price * item.quantity - item.discount / 100 * item.price * item.quantity))) | number:'1.2-2' }} Tk </td>
+                          <td>{{ ((item.price * item.quantity) - (item.discount / 100 * item.price * item.quantity) + (item.vat / 100 * (item.price * item.quantity - item.discount / 100 * item.price * item.quantity))) | number:'1.2-2' }}</td>
                           <td>
                               <button (click)="removeFromCart(item.productId)" class="btn btn-danger btn-sm">
                                   <i class="bi bi-trash"></i>
@@ -189,12 +192,12 @@
       </div>
     
       <div class="col-md-6">
-        <div class="footer-button-group">
+        <div class="footer-button-group-right">
 
           <button class="btn btn-primary footer-custom-btn">
             <i class="bi bi-calculator icon-calculator"></i> 
           </button>
-          <button class="btn light-button footer-custom-btn ">Total {{ total }} Tk</button>
+          <button class="btn footer-light-button ">Total {{ total }}</button>
           <button class="btn  btn-Payment" data-bs-toggle="offcanvas" data-bs-target="#paymentDrawer">
             Payment <span class="arrow-icon">></span>
           </button>
